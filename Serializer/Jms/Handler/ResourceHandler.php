@@ -65,7 +65,7 @@ class ResourceHandler implements SubscribingHandlerInterface
      */
     public function serializeResource(
         JsonSerializationVisitor $visitor,
-        Resource $resource,
+        PuliResource $resource,
         array $type,
         Context $context
     ) {

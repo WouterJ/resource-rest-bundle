@@ -101,19 +101,4 @@ Feature: PHPCR-ODM resource repository
             {"node_name": "foo-bar"}
             """
         Then the response code should be 200
-        When I send a GET request to "/api/phpcrodm_repo/foo-bar"
-        Then the response code should be 200
-        And the response should contain json:
-            """
-            {
-                "repository_alias": "phpcrodm_repo",
-                "repository_type": "doctrine_phpcr_odm",
-                "payload_alias": "article",
-                "payload_type": "Symfony\\Cmf\\Bundle\\ResourceRestBundle\\Tests\\Resources\\TestBundle\\Document\\Article",
-                "path": "\/foo-bar",
-                "node_name": "foo-bar",
-                "label": "foo-bar",
-                "repository_path": "\/foo-bar",
-                "children": []
-            }
-            """
+        And there is a "Article" document at "/api/phpcrodm_repo/foo-bar"
