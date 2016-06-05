@@ -74,11 +74,12 @@ class ResourceController
         $this->failOnNotEditable($repository, $repositoryName);
 
         $resourceName = $request->get('node_name');
+        $resourcePath = $request->get('path');
 
         $targetPath = null;
-        if ($path !== $path) {
+        if ($path !== $resourcePath) {
             $targetPath = $path;
-        } elseif ($resourceName !== PathHelper::getLocalNodeName(PathHelper::absolutizePath($path))) {
+        } elseif ($resourceName !== PathHelper::getLocalNodeName(PathHelper::absolutizePath($path, ''))) {
             $targetPath = PathHelper::absolutizePath($repositoryName, PathHelper::getParentPath($path));
         }
 
