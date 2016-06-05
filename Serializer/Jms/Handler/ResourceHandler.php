@@ -22,7 +22,7 @@ use Symfony\Cmf\Component\Resource\RepositoryRegistryInterface;
 use Symfony\Cmf\Bundle\ResourceRestBundle\Registry\PayloadAliasRegistry;
 use Symfony\Cmf\Bundle\ResourceRestBundle\Registry\EnhancerRegistry;
 use Symfony\Cmf\Component\Resource\Repository\Resource\CmfResource;
-use Puli\Repository\Api\Resource\Resource;
+use Puli\Repository\Api\Resource\PuliResource;
 
 /**
  * Handle PHPCR resource serialization.
@@ -51,7 +51,7 @@ class ResourceHandler implements SubscribingHandlerInterface
             array(
                 'event' => GraphNavigator::DIRECTION_SERIALIZATION,
                 'format' => 'json',
-                'type' => 'Puli\Repository\Api\Resource\Resource',
+                'type' => 'Puli\Repository\Api\Resource\PuliResource',
                 'method' => 'serializeResource',
             ),
         );
@@ -73,7 +73,7 @@ class ResourceHandler implements SubscribingHandlerInterface
         $context->accept($data);
     }
 
-    private function doSerializeResource(Resource $resource, $depth = 0)
+    private function doSerializeResource(PuliResource $resource, $depth = 0)
     {
         $data = array();
         $repositoryAlias = $this->registry->getRepositoryAlias($resource->getRepository());
