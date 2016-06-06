@@ -40,11 +40,10 @@ Feature: PHPCR resource repository
             }
             """
 
-    @doNow
     Scenario: Rename a PHPCR resource
         Given there exists a "Article" document at "/cmf/articles/foo":
-            | title | Article 1 |
-            | body | This is my article |
+            | title | Article 1          |
+            | body  | This is my article |
         Then I set header "Content-Type" with value "application/json"
         When I send a PATCH request to "/api/phpcr_repo/foo" with body:
             """
@@ -52,18 +51,6 @@ Feature: PHPCR resource repository
             """
         Then the response code should be 200
         When I send a GET request to "/api/phpcr_repo/foo-bar"
-        Then the response code should be 200
-        And the response should contain json:
-            """
-            {
-                "repository_alias": "phpcr_repo",
-                "repository_type": "doctrine_phpcr",
-                "payload_alias": "article",
-                "payload_type": "Symfony\\Cmf\\Bundle\\ResourceRestBundle\\Tests\\Resources\\TestBundle\\Document\\Article",
-                "path": "\/foo-bar",
-                "node_name": "foo-bar",
-                "label": "foo-bar",
-                "repository_path": "\/foo-bar",
-                "children": []
-            }
-            """
+        Then there is an "Article" document at "/cmf/articles/foo-bar":
+            | title | Article 1          |
+            | body  | This is my article |

@@ -137,12 +137,30 @@ class ResourceContext implements Context, KernelAwareContext
     }
 
     /**
-     * @Given there is a :class document at :path
+     * @Then there is a/an :class document at :path
+     * @Then there is a/an :class document at :path:
      */
-    public function thereIsADocumentAt($class, $path)
+    public function thereIsADocumentAt($class, $path, TableNode $fields = null)
     {
+        $class = 'Symfony\\Cmf\\Bundle\\ResourceRestBundle\\Tests\\Resources\\TestBundle\\Document\\'.$class;
+        $path = '/tests'.$path;
+
+        if (!class_exists($class)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Class "%s" does not exist',
+                $class
+            ));
+        }
         $document = $this->manager->find($class, $path);
-        
+
         Assert::notNull($document);
+
+        if (null === $fields) {
+            return;
+        }
+
+        foreach ($fields->getRowsHash() as $field => $value) {
+            Assert::eq($document->$field, $value);
+        }
     }
 }

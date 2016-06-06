@@ -22,8 +22,8 @@ Feature: PHPCR-ODM resource repository
 
     Scenario: Retrieve a PHPCR-ODM resource
         Given there exists a "Article" document at "/cmf/articles/foo":
-            | title | Article 1 |
-            | body | This is my article |
+            | title | Article 1          |
+            | body  | This is my article |
         When I send a GET request to "/api/phpcrodm_repo/foo"
         Then the response code should be 200
         And the response should contain json:
@@ -43,14 +43,14 @@ Feature: PHPCR-ODM resource repository
 
     Scenario: Retrieve a PHPCR-ODM resource with children
         Given there exists a "Article" document at "/cmf/articles/foo":
-            | title | Article 1 |
-            | body | This is my article |
+            | title | Article 1          |
+            | body  | This is my article |
         And there exists a "Article" document at "/cmf/articles/foo/bar":
-            | title | Article child |
-            | body | There are many like it |
+            | title | Article child          |
+            | body  | There are many like it |
         And there exists a "Article" document at "/cmf/articles/foo/boo":
-            | title | Article child |
-            | body | But this one is mine |
+            | title | Article child        |
+            | body  | But this one is mine |
         When I send a GET request to "/api/phpcrodm_repo/foo"
         Then the response code should be 200
         And the response should contain json:
@@ -90,15 +90,16 @@ Feature: PHPCR-ODM resource repository
                 }
             }
             """
-    @doNow
+
     Scenario: Rename a PHPCR-ODM resource
         Given there exists a "Article" document at "/cmf/articles/foo":
-            | title | Article 1 |
-            | body | This is my article |
-        Then I set header "Content-Type" with value "application/json"
+            | title | Article 1          |
+            | body  | This is my article |
         When I send a PATCH request to "/api/phpcrodm_repo/foo" with body:
             """
             {"node_name": "foo-bar"}
             """
         Then the response code should be 200
-        And there is a "Article" document at "/api/phpcrodm_repo/foo-bar"
+        And there is an "Article" document at "/cms/articles/foo-bar":
+            | title | Article 1          |
+            | body  | This is my article |
