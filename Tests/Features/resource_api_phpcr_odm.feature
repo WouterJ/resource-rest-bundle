@@ -97,7 +97,7 @@ Feature: PHPCR-ODM resource repository
             | body  | This is my article |
         When I send a PATCH request to "/api/phpcrodm_repo/foo" with body:
             """
-            {"node_name": "foo-bar"}
+            [{"operation": "move", "target": "/foo-bar"}]
             """
         Then the response code should be 200
         And there is an "Article" document at "/cms/articles/foo-bar":

@@ -73,29 +73,26 @@ class ResourceController
         $repository = $this->registry->get($repositoryName);
         $this->failOnNotEditable($repository, $repositoryName);
 
-        $resourceName = $request->get('node_name');
-        $resourcePath = $request->get('path');
+        $path = '/'.ltrim($path, '/');
 
-        $targetPath = null;
-        if ($path !== $resourcePath) {
-            $targetPath = $path;
-        } elseif ($resourceName !== PathHelper::getLocalNodeName(PathHelper::absolutizePath($path, ''))) {
-            $targetPath = PathHelper::absolutizePath($repositoryName, PathHelper::getParentPath($path));
+        $requestContent = json_decode($request->getContent(), true);
+        if (!$requestContent) {
+            return $this->badRequestResponse('Only JSON request bodies are supported.');
         }
 
-        if (null == $targetPath) {
-            return $this->badRequestRespons('Move and rename is supported only.');
+        foreach ($requestContent as $action) {
+            switch ($action['operation']) {
+                case 'move':
+                    $targetPath = $action['target'];
+                    $repository->move($path, $targetPath);
+
+                    break;
+                default:
+                    return $this->badRequestResponse('Only move operation is supported.');
+            }
         }
 
-        try {
-            $repository->move($path, $targetPath);
-        } catch (\InvalidArgumentException $e) {
-            return $this->badRequestResponse($e->getMessage());
-        }
-
-        $resource = $repository->get($targetPath);
-
-        return $this->createResponse($resource);
+        return new Response();
     }
 
     /**

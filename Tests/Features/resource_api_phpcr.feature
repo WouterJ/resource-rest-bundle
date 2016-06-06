@@ -47,7 +47,7 @@ Feature: PHPCR resource repository
         Then I set header "Content-Type" with value "application/json"
         When I send a PATCH request to "/api/phpcr_repo/foo" with body:
             """
-            {"node_name": "foo-bar"}
+            [{"operation": "move", "target": "/foo-bar"}]
             """
         Then the response code should be 200
         When I send a GET request to "/api/phpcr_repo/foo-bar"
